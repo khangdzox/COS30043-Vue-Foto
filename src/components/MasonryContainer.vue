@@ -1,5 +1,5 @@
 <template>
-  <div class="masonry container">
+  <div class="mt-3">
     <div class="row">
       <div class="col"></div>
       <div class="col" v-if="columns >= 2"></div>
@@ -40,8 +40,8 @@ export default {
       default: 6
     },
     gap: {
-      type: Number,
-      default: 10
+      type: String,
+      default: '10'
     }
   },
   mounted () {
@@ -53,13 +53,13 @@ export default {
       child.style.marginBottom = `${this.gap}px`
     }
 
-    window.addEventListener('resize', this.onResize)
+    window.onresize = this.onResize
   },
   updated () {
     this.arrange()
   },
   unmounted () {
-    window.removeEventListener('resize', this.onResize)
+    window.onresize = null
   },
   data () {
     return {
@@ -106,13 +106,13 @@ export default {
 
     computeColumns () {
       let columns = 1
-      if (this.width >= 1320) {
+      if (this.width >= 1296) {
         columns = this.xxl
-      } else if (this.width >= 1140) {
+      } else if (this.width >= 1116) {
         columns = this.xl
-      } else if (this.width >= 960) {
+      } else if (this.width >= 936) {
         columns = this.lg
-      } else if (this.width >= 720) {
+      } else if (this.width >= 696) {
         columns = this.md
       } else {
         columns = this.sm

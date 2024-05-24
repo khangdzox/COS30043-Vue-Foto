@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "name": "John Doe",
+        "email": "john@doe.com",
+        "img": "https://randomuser.me/api/portraits/men/85.jpg"
+    },
+    {
+        "id": 2,
+        "name": "Alex Smith",
+        "email": "alex@smith.net",
+        "img": "https://randomuser.me/api/portraits/men/4.jpg"
+    },
+    {
+        "id": 3,
+        "name": "Sara Watson",
+        "email": "sara@watson.org",
+        "img": ""
+    }
+]

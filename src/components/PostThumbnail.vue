@@ -1,29 +1,28 @@
 <template>
   <div class="thumbnail">
-    <img class="thumbnail-img" :src="this.img" @load="$emit('imageLoaded')">
-    <h3 class="thumbnail-title">{{ title }}</h3>
+    <router-link :to="`/post/${id}`">
+      <img class="thumbnail-img" :src="this.img" @load="$emit('imageLoaded')">
+      <h3 class="thumbnail-title mt-1">{{ title }}</h3>
+    </router-link>
   </div>
 </template>
 
 <script>
+import Posts from '@/assets/posts.json'
+
 export default {
   name: 'PostThumbnail',
-  props: {
-    title: {
-      type: String,
-      default: 'Post Title'
-    },
-    img: {
-      type: String,
-      default: 'https://picsum.photos/200/200?random=0'
+  props: ['id'],
+  data () {
+    return {
+      title: Posts.find(post => post.id === this.id)?.title,
+      img: Posts.find(post => post.id === this.id)?.img
     }
   }
 }
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-
 .thumbnail {
   display: flex;
   flex-direction: column;
@@ -31,6 +30,10 @@ export default {
   overflow: hidden;
   padding: 0px;
   gap: 10px;
+}
+.thumbnail a {
+  color: #000000;
+  text-decoration: none;
 }
 .thumbnail-img {
   width: 100%;
@@ -44,5 +47,6 @@ export default {
   font-weight: 600;
   font-size: 20px;
   line-height: 24px;
+  text-align: left;
 }
 </style>

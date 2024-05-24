@@ -1,0 +1,32 @@
+[
+    {
+        "postId": 1,
+        "authorId": 1,
+        "content": "Wow this is great!"
+    },
+    {
+        "postId": 1,
+        "authorId": 2,
+        "content": "I love this!"
+    },
+    {
+        "postId": 1,
+        "authorId": 3,
+        "content": "How do I get started? This is amazing! I love it! Can't wait to get started!"
+    },
+    {
+        "postId": 1,
+        "authorId": 1,
+        "content": "I'm so excited to get started! Last time I tried to do this, I failed miserably. I'm so excited to get started!"
+    },
+    {
+        "postId": 1,
+        "authorId": 2,
+        "content": "This is really cool! I love it! When I first started, I was so nervous. But now I'm so excited to get started!"
+    },
+    {
+        "postId": 1,
+        "authorId": 3,
+        "content": "I'm so excited to get started! I can't wait to get started! I'm so excited to get started!"
+    }
+]

@@ -1,12 +1,19 @@
 <template>
-  <div class="home">
-    <MasonryContainer :gap="20" v-slot="masonry">
-      <PostThumbnail v-for="p in posts" :key="p.title"
-      :title="p.title"
-      :img="p.img"
-      @image-loaded="masonry.arrange()"
-      />
-    </MasonryContainer>
+  <div class="row">
+    <div class="col">
+      <HorizontalList>
+        <TagPill fontSize="20" v-for="tag in tags" :key="tag">
+          <router-link to="/">{{ tag }}</router-link>
+        </TagPill>
+      </HorizontalList>
+      <MasonryContainer gap="20" v-slot="masonry">
+        <PostThumbnail v-for="p in posts"
+          :key="p.title"
+          :id="p.id"
+          @image-loaded="masonry.arrange()"
+        />
+      </MasonryContainer>
+    </div>
   </div>
 </template>
 
@@ -14,57 +21,22 @@
 // @ is an alias to /src
 import MasonryContainer from '@/components/MasonryContainer.vue'
 import PostThumbnail from '@/components/PostThumbnail.vue'
+import Posts from '@/assets/posts.json'
+import HorizontalList from '@/components/HorizontalList.vue'
+import TagPill from '@/components/TagPill.vue'
 
 export default {
   name: 'HomeView',
   components: {
     MasonryContainer,
-    PostThumbnail
+    PostThumbnail,
+    HorizontalList,
+    TagPill
   },
   data () {
     return {
-      posts: [
-        {
-          title: 'Post 1',
-          img: 'https://picsum.photos/id/94/400/300'
-        },
-        {
-          title: 'Post 2',
-          img: 'https://picsum.photos/id/95/520/300'
-        },
-        {
-          title: 'Post 3',
-          img: 'https://picsum.photos/id/96/410/300'
-        },
-        {
-          title: 'Post 4',
-          img: 'https://picsum.photos/id/100/550/300'
-        },
-        {
-          title: 'Post 5',
-          img: 'https://picsum.photos/id/98/490/300'
-        },
-        {
-          title: 'Post 6',
-          img: 'https://picsum.photos/id/99/670/300'
-        },
-        {
-          title: 'Post 7',
-          img: 'https://picsum.photos/id/74/430/300'
-        },
-        {
-          title: 'Post 8',
-          img: 'https://picsum.photos/id/75/660/300'
-        },
-        {
-          title: 'Post 9',
-          img: 'https://picsum.photos/id/76/450/300'
-        },
-        {
-          title: 'Post 10',
-          img: 'https://picsum.photos/id/77/700/300'
-        }
-      ]
+      posts: Posts,
+      tags: ['All', 'Nature', 'People', 'Tech', 'Animals', 'Architecture', 'Food', 'Travel', 'Fashion', 'Health', 'Art', 'Business', 'Education', 'Fitness', 'Music', 'Sports']
     }
   }
 }
