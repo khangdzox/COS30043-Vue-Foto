@@ -1,10 +1,13 @@
 <template>
-  <form class="d-flex search-bar-container" @submit.prevent="search()">
+  <form class="d-flex search-bar-container" @submit.prevent="search" @reset.prevent="reset">
     <div class="input-group">
-      <input type="text" class="search-elem form-control" placeholder="Search" aria-label="Search" ref="search-input">
+      <!-- Search input -->
+      <input type="text" class="search-elem form-control" placeholder="Search" aria-label="Search" ref="search-input" v-model="query">
+      <!-- Reset button -->
       <button class="btn search-elem" type="reset">
         <i class="bi bi-x-lg"></i>
       </button>
+      <!-- Submit button -->
       <button class="btn search-elem" type="submit">
         <i class="bi bi-search"></i>
       </button>
@@ -15,12 +18,21 @@
 <script>
 export default {
   name: 'SearchBar',
+  data () {
+    return {
+      query: this.$store.state.query
+    }
+  },
   methods: {
     search() {
       const input = this.$refs['search-input']
       if (input.value) {
-        alert(`You searched for ${input.value}`)
+        this.$store.commit('setQuery', input.value)
       }
+    },
+    reset() {
+      this.query = ''
+      this.$store.commit('delQuery')
     }
   }
 }

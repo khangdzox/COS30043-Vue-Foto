@@ -1,5 +1,5 @@
 <template>
-  <span class="badge rounded-pill tag-pill">
+  <span class="badge rounded-pill tag-pill text-capitalize">
     <slot></slot>
   </span>
 </template>
@@ -14,7 +14,6 @@ export default {
 <style>
 .tag-pill {
   padding: v-bind(0.5 * parseInt(fontSize) + 'px') v-bind(fontSize + 'px') !important;
-  text-transform: capitalize;
   background-color: #eee;
   transition: background-color 0.3s;
 }
@@ -22,10 +21,11 @@ export default {
   background-color: #ccc;
   transition: background-color 0.3s;
 }
-.tag-pill a {
-  font-size: v-bind(fontSize + 'px');
-  font-weight: 600;
-  color: #000000;
+.tag-pill,
+.tag-pill * {
+  font-size: v-bind(fontSize + 'px') !important;
+  font-weight: 600 !important;
+  color: #000000 !important;
   text-decoration: none;
 }
 </style>

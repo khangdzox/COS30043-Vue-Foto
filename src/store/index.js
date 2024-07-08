@@ -3,19 +3,24 @@ import { createStore } from 'vuex'
 export default createStore({
   state () {
     return {
-      user: {
-        id: 1,
-      }
+      user: null,
+      query: ''
     }
   },
   getters: {
   },
   mutations: {
-    logout (state) {
+    delUser (state) {
       state.user = null
     },
-    login (state, id) {
-      state.user = { id }
+    setUser (state, user) {
+      state.user = user
+    },
+    delQuery (state) {
+      state.query = ''
+    },
+    setQuery (state, query) {
+      state.query = query
     }
   },
   actions: {

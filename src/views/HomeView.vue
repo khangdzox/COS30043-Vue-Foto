@@ -1,18 +1,14 @@
 <template>
   <div class="row">
     <div class="col">
-      <HorizontalList>
+
+      <HorizontalList :key="tags">
         <TagPill fontSize="20" v-for="tag in tags" :key="tag">
-          <router-link to="/">{{ tag }}</router-link>
+          <div @click="$store.commit('setQuery', tag)">{{ tag }}</div>
         </TagPill>
       </HorizontalList>
-      <MasonryContainer gap="20" v-slot="masonry">
-        <PostThumbnail v-for="p in posts"
-          :key="p.title"
-          :id="p.id"
-          @image-loaded="masonry.arrange()"
-        />
-      </MasonryContainer>
+
+      <MasonryContainer gap="20" :posts="posts" :key="posts"/>
     </div>
   </div>
 </template>
@@ -20,8 +16,6 @@
 <script>
 // @ is an alias to /src
 import MasonryContainer from '@/components/MasonryContainer.vue'
-import PostThumbnail from '@/components/PostThumbnail.vue'
-import Posts from '@/assets/posts.json'
 import HorizontalList from '@/components/HorizontalList.vue'
 import TagPill from '@/components/TagPill.vue'
 
@@ -29,14 +23,35 @@ export default {
   name: 'HomeView',
   components: {
     MasonryContainer,
-    PostThumbnail,
     HorizontalList,
     TagPill
   },
+  async mounted () {
+    const posts_res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/posts`)
+    this.posts = await posts_res.json()
+
+    const tags_res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/tags`)
+    this.tags = await tags_res.json()
+  },
+  watch: {
+    async '$store.state.query' () {
+      var query = this.$store.state.query
+      if (query !== '') {
+        const posts_res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/posts`)
+        this.posts = await posts_res.json()
+        this.posts = this.posts.filter(post => {
+          return post.tags?.includes(query) || post.title.toLowerCase().includes(query.toLowerCase()) || post.content.toLowerCase().includes(query.toLowerCase())}
+        )
+      } else {
+        const posts_res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/posts`)
+        this.posts = await posts_res.json()
+      }
+    }
+  },
   data () {
     return {
-      posts: Posts,
-      tags: ['All', 'Nature', 'People', 'Tech', 'Animals', 'Architecture', 'Food', 'Travel', 'Fashion', 'Health', 'Art', 'Business', 'Education', 'Fitness', 'Music', 'Sports']
+      posts: [],
+      tags: []
     }
   }
 }

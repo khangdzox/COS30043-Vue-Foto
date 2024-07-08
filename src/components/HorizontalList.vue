@@ -1,11 +1,16 @@
 <template>
   <div class="position-relative overflow-hidden">
+    <!-- Left edge button -->
     <div class="to-left edge-button d-flex align-items-center position-absolute top-50 start-0 translate-middle-y" @click="scrollLeft()" v-if="shouldShowLeft">
       <i class="bi bi-chevron-left"></i>
     </div>
+
+    <!-- List content -->
     <div class="d-flex flex-nowrap justify-content-start horizontal-scroll" ref="horizontal-scroll">
       <slot></slot>
     </div>
+
+    <!-- Right edge button -->
     <div class="to-right edge-button d-flex align-items-center position-absolute top-50 end-0 translate-middle-y" @click="scrollRight()" v-if="shouldShowRight">
       <i class="bi bi-chevron-right"></i>
     </div>
@@ -15,25 +20,33 @@
 <script>
 export default {
   name: 'HorizontalList',
-  data() {
+  props: {
+    parentBgColor: {
+      type: String,
+      default: '#f5f5f5'
+    }
+  },
+  data () {
     return {
       shouldShowLeft: false,
       shouldShowRight: false
     }
   },
-  mounted() {
-    this.$nextTick(() => {
-      this.shouldShowLeft = this.checkShowLeft();
-      this.shouldShowRight = this.checkShowRight();
-    });
-    this.$refs['horizontal-scroll'].addEventListener('scroll', () => {
-      this.shouldShowLeft = this.checkShowLeft();
-      this.shouldShowRight = this.checkShowRight();
-    });
-    window.addEventListener('resize', () => {
-      this.shouldShowLeft = this.checkShowLeft();
-      this.shouldShowRight = this.checkShowRight();
-    });
+  mounted () {
+    // Initial check for edge buttons
+    this.$nextTick( this.checkShowArrows() )
+
+    // Check for edge buttons on scroll and resize
+    this.$refs['horizontal-scroll'].addEventListener('scroll', this.checkShowArrows)
+    window.addEventListener('resize', this.checkShowArrows)
+  },
+  unmounted () {
+    this.$refs['horizontal-scroll']?.removeEventListener('scroll', this.checkShowArrows)
+    window.removeEventListener('resize', this.checkShowArrows)
+  },
+  updated () {
+    // Check for edge buttons on slot update
+    this.checkShowArrows()
   },
   methods: {
     scrollLeft() {
@@ -47,6 +60,10 @@ export default {
         left: 200,
         behavior: 'smooth'
       });
+    },
+    checkShowArrows() {
+      this.shouldShowLeft = this.checkShowLeft()
+      this.shouldShowRight = this.checkShowRight()
     },
     checkShowLeft() {
       return this.$refs['horizontal-scroll'].scrollLeft > 0;
@@ -66,11 +83,11 @@ export default {
 }
 .to-left {
   padding-right: 30px;
-  background: linear-gradient(to left, #f5f5f500, #f5f5f5ff, #f5f5f5ff);
+  background: linear-gradient(to left, v-bind(parentBgColor + '00'), v-bind(parentBgColor + 'ff'), v-bind(parentBgColor + 'ff'));
 }
 .to-right {
   padding-left: 30px;
-  background: linear-gradient(to right, #f5f5f500, #f5f5f5ff, #f5f5f5ff);
+  background: linear-gradient(to right, v-bind(parentBgColor + '00'), v-bind(parentBgColor + 'ff'), v-bind(parentBgColor + 'ff'));
 }
 .horizontal-scroll {
   width: 100%;

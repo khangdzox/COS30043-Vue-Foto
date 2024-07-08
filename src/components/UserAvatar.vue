@@ -1,18 +1,18 @@
 <template>
   <router-link :to="`/user/${userId}`" class="user-avatar">
+    <!-- Show user avatar -->
     <img v-if="src" :src="src" class="user-img"/>
+
+    <!-- Show default avatar if user does not have avatar -->
     <i v-else class="bi bi-person-fill user-no-img"></i>
   </router-link>
 </template>
 
 <script>
-import Users from '@/assets/users.json'
-
 export default {
   name: 'UserAvatar',
   props: {
     userId: {
-      type: Number,
       required: true
     },
     size: {
@@ -20,9 +20,18 @@ export default {
       default: 60
     },
   },
-  data () {
+  async mounted() {
+    if (!this.userId) {
+      return
+    }
+
+    const res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/users/${this.userId}`)
+    const user = await res.json()
+    this.src = user.img
+  },
+  data() {
     return {
-      src: Users.find(user => user.id === this.userId)?.img
+      src: ''
     }
   },
 }
@@ -40,6 +49,7 @@ export default {
 .user-img {
   width: v-bind(size + 'px');
   height: v-bind(size + 'px');
+  object-fit: cover;
 }
 .user-no-img {
   font-size: v-bind(size + 'px');

@@ -1,6 +1,7 @@
 <template>
   <div class="mt-3">
     <div class="row">
+      <!-- Predefine 6 columns to move contents in -->
       <div class="col"></div>
       <div class="col" v-if="columns >= 2"></div>
       <div class="col" v-if="columns >= 3"></div>
@@ -8,17 +9,26 @@
       <div class="col" v-if="columns >= 5"></div>
       <div class="col" v-if="columns >= 6"></div>
 
+      <!-- Main content slot -->
       <div ref="masonry_img_temp">
-        <slot :arrange="arrange"></slot>
+        <template v-for="post in posts" :key="post.id">
+          <PostThumbnail :post="post" @image-loaded="arrange"/>
+        </template>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import PostThumbnail from '@/components/PostThumbnail.vue'
+
 export default {
   name: 'MasonryContainer',
   props: {
+    posts: {
+      type: Array,
+      default: () => []
+    },
     sm: {
       type: Number,
       default: 1
@@ -44,22 +54,25 @@ export default {
       default: '10'
     }
   },
+  components: {
+    PostThumbnail,
+  },
   mounted () {
-    this.children = [...this.$refs.masonry_img_temp.children]
-    this.width = this.$el.querySelector('.row').offsetWidth
-    this.columns = this.computeColumns()
+    this.children = [...this.$refs.masonry_img_temp.children]   // Get all children
+    this.width = this.$el.querySelector('.row').offsetWidth     // Get the width of the layout
+    this.columns = this.computeColumns()                        // Compute the number of columns
 
-    for (const child of this.children) {
-      child.style.marginBottom = `${this.gap}px`
-    }
-
-    window.onresize = this.onResize
+    window.onresize = this.onResize                             // Add resize event listener
   },
   updated () {
-    this.arrange()
+    if (this.$refs.masonry_img_temp.children.length > 0) {
+      this.children = [...this.$refs.masonry_img_temp.children] // Update children
+    }
+
+    this.arrange()                                              // Rearrange images when updated
   },
   unmounted () {
-    window.onresize = null
+    window.onresize = null                                      // Remove resize event listener
   },
   data () {
     return {
@@ -73,6 +86,7 @@ export default {
       const width = this.$el.querySelector('.row').offsetWidth
 
       if (width === this.width) {
+        // Only rearrange if the width has changed to prevent unnecessary calls
         return
       }
 
@@ -86,21 +100,22 @@ export default {
       let colIndex = 0
       let imgIndex = 0
 
-      const cols = this.$el.querySelectorAll('.col')
+      const cols = this.$el.querySelectorAll('.col')                                  // Clear all columns
       for (const col of cols) {
         col.innerHTML = ''
       }
 
-      const colHeights = Array.from(cols).fill(0)
+      const colHeights = Array.from(cols).fill(0)                                     // Initialize column heights
 
       while (imgIndex < this.children.length) {
         const elem = this.children[imgIndex]
+        elem.style.marginBottom = `${this.gap}px`                                    // Set the gap between images
 
-        cols[colIndex].appendChild(elem)
-        colHeights[colIndex] += parseInt(elem.offsetHeight) + parseInt(this.gap)
+        cols[colIndex].appendChild(elem)                                              // Append image to column
+        colHeights[colIndex] += parseInt(elem.offsetHeight) + parseInt(this.gap)      // Update column height
 
-        imgIndex++
-        colIndex = colHeights.indexOf(Math.min(...colHeights))
+        imgIndex++                                                                    // Move to next image
+        colIndex = colHeights.indexOf(Math.min(...colHeights))                        // Find the shortest column to append next image
       }
     },
 

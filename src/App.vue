@@ -1,7 +1,7 @@
 <template>
   <NavBar/>
   <div class="container pt-3">
-    <router-view/>
+    <router-view :key="$route.fullPath"/>
   </div>
 </template>
 
@@ -23,5 +23,6 @@ html, #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #f5f5f5;
+  scrollbar-gutter: stable;
 }
 </style>

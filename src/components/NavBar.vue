@@ -1,26 +1,29 @@
 <template>
   <nav class="navbar navbar-light bg-light sticky-top">
     <div class="container-fluid">
-      <router-link to="/" class="navbar-brand">Foto</router-link>
+      <!-- Brand -->
+      <router-link to="/" class="brand">Foto</router-link>
 
+      <!-- Search bar -->
       <SearchBar/>
 
-      <div v-if="this.$store.state.user" ref="navbar-avatar"
-      @mouseenter="$refs['navbar-avatar'].querySelector('.dropdown-menu').classList.add('show')"
-      @mouseleave="$refs['navbar-avatar'].querySelector('.dropdown-menu').classList.remove('show')">
+      <!-- User avatar if logged in -->
+      <div v-if="this.$store.state.user" ref="navbar-avatar" v-dropdown-togglable>
         <UserAvatar class="dropdown" :userId="this.$store.state.user.id"/>
 
+        <!-- Dropdown menu -->
         <ul class="dropdown-menu">
           <li>
             <router-link :to="`/user/${this.$store.state.user.id}`" class="dropdown-item">Profile</router-link>
           </li>
           <li>
-            <router-link to="#" class="dropdown-item" @click.prevent="$store.commit('logout')">Logout</router-link>
+            <router-link to="#" class="dropdown-item" @click.prevent="$store.commit('setUser', null)">Logout</router-link>
           </li>
         </ul>
       </div>
 
-      <router-link v-else to="#" class="btn login-btn" @click.prevent="$store.commit('login', 1)">Login</router-link>
+      <!-- Login button if not logged in -->
+      <router-link v-else to="/login" class="btn rounded-pill login-btn">Login</router-link>
     </div>
   </nav>
 </template>
@@ -29,13 +32,28 @@
 import SearchBar from '@/components/SearchBar.vue'
 import UserAvatar from './UserAvatar.vue';
 
+const dropdownTogglable = {
+  mounted(el) {
+    el.addEventListener('mouseenter', () => {
+      el.querySelector('.dropdown-menu').classList.add('show')
+    })
+    el.addEventListener('mouseleave', () => {
+      el.querySelector('.dropdown-menu').classList.remove('show')
+    })
+  }
+}
+
 export default {
   name: 'NavBar',
   components: {
     SearchBar,
     UserAvatar
   },
+  directives: {
+    dropdownTogglable
+  },
   mounted() {
+    // Add shadow to navbar on scroll
     window.onscroll = () => {
       const navbar = document.querySelector('.navbar')
       if (window.scrollY > 0) {
@@ -51,9 +69,10 @@ export default {
 <style scoped>
 .navbar {
   background-color: #f5f5f5 !important;
+  transition: 0.3s;
 }
 
-.navbar-brand {
+.brand {
   font-family: 'Lemon';
   font-size: 30px;
   font-weight: 400;
