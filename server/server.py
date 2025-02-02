@@ -4,6 +4,7 @@ import databases
 import sqlalchemy
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 
 # Create a database connection
@@ -307,3 +308,5 @@ async def search_posts(query: str):
                         .having(posts_table.c.title.like(search_query) | posts_table.c.content.like(search_query) | sqlalchemy.func.group_concat(tags_table.c.tag).like(search_query))
     posts = await database.fetch_all(_query)
     return posts
+
+app.mount("/", StaticFiles(directory="dist", html=True), name="client")
