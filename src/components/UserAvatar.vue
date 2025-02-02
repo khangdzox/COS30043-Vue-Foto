@@ -25,7 +25,7 @@ export default {
       return
     }
 
-    const res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/users/${this.userId}`)
+    const res = await fetch(`/api/users/${this.userId}`)
     const user = await res.json()
     this.src = user.img
   },

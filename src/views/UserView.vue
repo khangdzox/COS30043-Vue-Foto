@@ -72,18 +72,18 @@ export default {
       this.$refs['user-nav-about'].classList.add('active')
     })
 
-    const user_res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/users/${this.$route.params.userId}`)
+    const user_res = await fetch(`/api/users/${this.$route.params.userId}`)
     this.user = await user_res.json()
 
-    const user_posts_res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/users/${this.$route.params.userId}/posts`)
+    const user_posts_res = await fetch(`/api/users/${this.$route.params.userId}/posts`)
     this.user_posts = await user_posts_res.json()
     console.log(this.user_posts)
 
-    const saved_res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/users/${this.$route.params.userId}/saved`)
+    const saved_res = await fetch(`/api/users/${this.$route.params.userId}/saved`)
     const saved_posts = await saved_res.json()
     this.saved_posts = []
     saved_posts.forEach(async post => {
-      const post_res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/posts/${post.postId}`)
+      const post_res = await fetch(`/api/posts/${post.postId}`)
       this.saved_posts.push(await post_res.json())
     })
   },

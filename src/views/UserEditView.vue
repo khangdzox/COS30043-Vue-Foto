@@ -71,7 +71,7 @@ export default {
     if (!this.$store.state.user) {
       this.$router.push('/login')
     }
-    const user_res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/users/${this.$store.state.user.id}`)
+    const user_res = await fetch(`/api/users/${this.$store.state.user.id}`)
     const user = await user_res.json()
     this.name = user.name
     this.email = user.email
@@ -108,7 +108,7 @@ export default {
       }
 
       const user_res = await fetch(
-        `${process.env.VUE_APP_API_BASE_URL}/api/users/${this.$store.state.user.id}`,
+        `/api/users/${this.$store.state.user.id}`,
         {
           method: 'PUT',
           headers: {

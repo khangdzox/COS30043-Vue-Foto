@@ -15,7 +15,7 @@ export default {
     MasonryContainer
   },
   async mounted () {
-    const posts_res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/posts/`)
+    const posts_res = await fetch(`/api/posts/`)
     this.posts = await posts_res.json()
   },
   data () {

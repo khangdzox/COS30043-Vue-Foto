@@ -71,13 +71,13 @@ export default {
       return
     }
 
-    const comments_res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/posts/${this.postId}/comments`)
+    const comments_res = await fetch(`/api/posts/${this.postId}/comments`)
     this.comments = await comments_res.json()
 
     var users_in_comments = this.comments.map(comment => comment.authorId)
     this.users = []
     users_in_comments.forEach(async userId => {
-      const user_res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/users/${userId}`)
+      const user_res = await fetch(`/api/users/${userId}`)
       this.users.push(await user_res.json())
     })
   },
@@ -98,7 +98,7 @@ export default {
           authorId: this.$store.state.user.id,
           content: input.value
         }
-        const res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/posts/${this.postId}/comments`, {
+        const res = await fetch(`/api/posts/${this.postId}/comments`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

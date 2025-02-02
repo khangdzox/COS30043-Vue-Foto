@@ -72,7 +72,7 @@ export default {
     }
 
     if (this.$route.params.postId) {
-      const post_res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/posts/${this.$route.params.postId}`)
+      const post_res = await fetch(`/api/posts/${this.$route.params.postId}`)
       const post = await post_res.json()
 
       if (this.$store.state.user.id != post.authorId) {
@@ -132,7 +132,7 @@ export default {
       if (!confirm('Are you sure you want to submit this post?')) return;
 
       if (this.isEdit) {
-        const res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/posts/${this.$route.params.postId}`, {
+        const res = await fetch(`/api/posts/${this.$route.params.postId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json'
@@ -152,7 +152,7 @@ export default {
           alert('Failed to update post')
         }
       } else {
-        const res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/posts`, {
+        const res = await fetch(`/api/posts`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -187,7 +187,7 @@ export default {
     },
     deletePost() {
       if (!confirm('Are you sure you want to delete this post?')) return;
-      fetch(`${process.env.VUE_APP_API_BASE_URL}/api/posts/${this.$route.params.postId}`, {
+      fetch(`/api/posts/${this.$route.params.postId}`, {
         method: 'DELETE'
       })
     }

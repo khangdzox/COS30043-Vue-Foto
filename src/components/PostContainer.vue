@@ -105,26 +105,26 @@ export default {
     CommentContainer
   },
   async mounted () {
-    const post_res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/posts/${this.id}`)
+    const post_res = await fetch(`/api/posts/${this.id}`)
     this.post = await post_res.json()
 
-    const author_res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/users/${this.post.authorId}`)
+    const author_res = await fetch(`/api/users/${this.post.authorId}`)
     this.author = await author_res.json()
 
-    const likes_count_res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/posts/${this.post.id}/likes`)
+    const likes_count_res = await fetch(`/api/posts/${this.post.id}/likes`)
     this.heart = await likes_count_res.json()
     this.heart = this.heart.count
 
     if (this.$store.state.user) {
-      const liked_res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/posts/${this.post.id}/likes/${this.$store.state.user.id}`)
+      const liked_res = await fetch(`/api/posts/${this.post.id}/likes/${this.$store.state.user.id}`)
       this.liked = await liked_res.json()
       this.liked = this.liked.liked
 
-      const saved_res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/posts/${this.post.id}/saved/${this.$store.state.user.id}`)
+      const saved_res = await fetch(`/api/posts/${this.post.id}/saved/${this.$store.state.user.id}`)
       this.saved = await saved_res.json()
       this.saved = this.saved.saved
 
-      const followed_res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/users/${this.$store.state.user.id}/follows/${this.author.id}`)
+      const followed_res = await fetch(`/api/users/${this.$store.state.user.id}/follows/${this.author.id}`)
       this.followed = await followed_res.json()
       this.followed = this.followed.followed
     }
@@ -143,7 +143,7 @@ export default {
     async followAuthor() {
       if (!this.checkLogin()) return
 
-      const follow_res = await fetch(`${process.env.VUE_APP_API_BASE_URL}/api/users/${this.$store.state.user.id}/follows/${this.author.id}`, {
+      const follow_res = await fetch(`/api/users/${this.$store.state.user.id}/follows/${this.author.id}`, {
         method: 'POST'
       })
       this.followed = await follow_res.json()
@@ -152,7 +152,7 @@ export default {
     unfollowAuthor() {
       if (!this.checkLogin()) return
 
-      const unfollow_res = fetch(`${process.env.VUE_APP_API_BASE_URL}/api/users/${this.$store.state.user.id}/follows/${this.author.id}`, {
+      const unfollow_res = fetch(`/api/users/${this.$store.state.user.id}/follows/${this.author.id}`, {
         method: 'DELETE'
       })
       this.followed = false
@@ -163,14 +163,14 @@ export default {
       if (this.liked) {
         this.heart -= 1
 
-        const unlike_res = fetch(`${process.env.VUE_APP_API_BASE_URL}/api/posts/${this.post.id}/likes/${this.$store.state.user.id}`, {
+        const unlike_res = fetch(`/api/posts/${this.post.id}/likes/${this.$store.state.user.id}`, {
           method: 'DELETE'
         })
         this.liked = false;
       } else {
         this.heart += 1;
 
-        const like_res = fetch(`${process.env.VUE_APP_API_BASE_URL}/api/posts/${this.post.id}/likes/${this.$store.state.user.id}`, {
+        const like_res = fetch(`/api/posts/${this.post.id}/likes/${this.$store.state.user.id}`, {
           method: 'POST'
         })
         this.liked = true;
@@ -180,12 +180,12 @@ export default {
       if (!this.checkLogin()) return
 
       if (this.saved) {
-        const unsave_res = fetch(`${process.env.VUE_APP_API_BASE_URL}/api/posts/${this.post.id}/saved/${this.$store.state.user.id}`, {
+        const unsave_res = fetch(`/api/posts/${this.post.id}/saved/${this.$store.state.user.id}`, {
           method: 'DELETE'
         })
         this.saved = false;
       } else {
-        const save_res = fetch(`${process.env.VUE_APP_API_BASE_URL}/api/posts/${this.post.id}/saved/${this.$store.state.user.id}`, {
+        const save_res = fetch(`/api/posts/${this.post.id}/saved/${this.$store.state.user.id}`, {
           method: 'POST'
         })
         this.saved = true;
