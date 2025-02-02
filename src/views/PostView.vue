@@ -15,7 +15,8 @@ export default {
     MasonryContainer
   },
   async mounted () {
-    const posts_res = await fetch(`/api/posts/`)
+    const posts_res = await fetch(`/api/posts`)
+    console.log(posts_res)
     this.posts = await posts_res.json()
   },
   data () {
